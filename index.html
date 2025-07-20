@@ -1,177 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mr. Detective S</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mr. Detective S Chatbox</title>
   <style type="text/css">
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #121212;
-      color: #fff;
+      padding: 0;
+      font-family: 'Courier New', monospace;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #1c1c1c, #2e2e2e);
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       height: 100vh;
+      color: #fff;
     }
 
-    header {
-      background: #1f1f1f;
-      padding: 15px;
-      text-align: center;
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-
-    #chat {
-      flex: 1;
+    .chatbox {
+      width: 400px;
+      max-height: 90vh;
+      background: #111;
+      border: 2px solid #444;
+      border-radius: 20px;
       padding: 20px;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding-right: 5px;
     }
 
     .msg {
-      max-width: 80%;
-      margin: 10px;
-      padding: 10px 15px;
-      border-radius: 10px;
+      margin-bottom: 10px;
+      animation: fadeIn 0.3s ease;
     }
 
-    .user {
-      background: #007aff;
-      align-self: flex-end;
+    .user-msg {
+      text-align: right;
+      color: #caffff;
     }
 
-    .bot {
-      background: #2c2c2c;
-      align-self: flex-start;
+    .bot-msg {
+      text-align: left;
+      color: #ff8b8b;
     }
 
-    #inputContainer {
+    .input-area {
       display: flex;
-      padding: 10px;
-      background: #1a1a1a;
     }
 
     input {
       flex: 1;
       padding: 10px;
+      border-radius: 10px;
       border: none;
-      border-radius: 8px;
+      outline: none;
       background: #222;
       color: white;
     }
 
     button {
       margin-left: 10px;
-      padding: 10px;
-      background: crimson;
+      padding: 10px 15px;
+      background: #ff0055;
+      border: none;
       color: white;
       font-weight: bold;
-      border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      background: #ff3366;
     }
 
     .heart {
-      font-size: 2rem;
-      animation: pop 0.6s ease-out forwards;
-      transform: scale(0);
-      color: red;
-      align-self: center;
+      animation: popHeart 0.6s ease;
+      display: inline-block;
     }
 
-    @keyframes pop {
-      to {
-        transform: scale(1.5);
-        opacity: 0;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .cat-container {
-      align-self: center;
-      margin-top: 10px;
-    }
-
-    .cat {
-      width: 80px;
-      height: 80px;
+    @keyframes popHeart {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
+  <div class="chatbox">
+    <div class="messages" id="messages">
+      <div class="bot-msg msg">🕵️‍♂️ Mr. Detective S: How can I help you today?</div>
+    </div>
+    <div class="input-area">
+      <input type="text" id="input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
-<header>🕶️ Mr. Detective S</header>
+  <script>
+    const input = document.getElementById("input");
+    const messages = document.getElementById("messages");
 
-<div id="chat"></div>
+    function sendMessage() {
+      const text = input.value.trim();
+      if (text === "") return;
 
-<div id="inputContainer">
-  <input id="userInput" type="text" placeholder="Say something..." />
-  <button onclick="sendMessage()">Send</button>
-</div>
+      // User message
+      const userMsg = document.createElement("div");
+      userMsg.className = "user-msg msg";
+      userMsg.textContent = text;
+      messages.appendChild(userMsg);
 
-<script>
-  const chat = document.getElementById('chat');
+      // Auto bot reply
+      setTimeout(() => {
+        const botMsg = document.createElement("div");
+        botMsg.className = "bot-msg msg";
+        
+        // Heart pops out if user says something nice
+        if (/❤️|love|thanks|good|cool|hello|hi|awesome/i.test(text)) {
+          botMsg.innerHTML = `🕵️‍♂️ Mr. Detective S: Appreciate that! 
+          tugnako <span class="heart">❤️</span>`;
+        } else {
+          botMsg.textContent = `🕵️‍♂️ Mr. Detective S: Got it. Analyzing...`;
+        }
 
-  function addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = `msg ${sender}`;
-    div.textContent = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+      }, 500);
 
-  function showHeart() {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.textContent = '❤️';
-    chat.appendChild(heart);
-  }
+      input.value = "";
+      messages.scrollTop = messages.scrollHeight;
+    }
 
-  function showCatIllusion() {
-    const catContainer = document.createElement('div');
-    catContainer.className = 'cat-container';
-
-    const cat = document.createElement('img');
-    cat.className = 'cat';
-
-    // Two images to alternate between
-    const catImages = [
-      'https://placekitten.com/80/80',
-      'https://placekitten.com/81/80'
-    ];
-
-    let i = 0;
-    cat.src = catImages[i];
-    catContainer.appendChild(cat);
-    chat.appendChild(catContainer);
-
-    // Flicker illusion
-    const flicker = setInterval(() => {
-      i = (i + 1) % catImages.length;
-      cat.src = catImages[i];
-    }, 300);
-
-    // Stop after 3 seconds
-    setTimeout(() => clearInterval(flicker), 3000);
-  }
-
-  function sendMessage() {
-    const input = document.getElementById('userInput');
-    const message = input.value.trim();
-    if (!message) return;
-
-    addMessage(message, 'user');
-    input.value = '';
-
-    showHeart();
-    showCatIllusion();
-
-    setTimeout(() => {
-      addMessage("Sleep nako 😴", 'bot');
-    }, 800);
-  }
-</script>
-
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
 </body>
 </html>
