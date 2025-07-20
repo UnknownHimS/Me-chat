@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mr. Detective S</title>
+  <style type="text/css">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    #chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .msg {
+      max-width: 80%;
+      margin: 10px;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+
+    .user {
+      background: #007aff;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #2c2c2c;
+      align-self: flex-start;
+    }
+
+    #inputContainer {
+      display: flex;
+      padding: 10px;
+      background: #1a1a1a;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: white;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 10px;
+      background: crimson;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .heart {
+      font-size: 2rem;
+      animation: pop 0.6s ease-out forwards;
+      transform: scale(0);
+      color: red;
+      align-self: center;
+    }
+
+    @keyframes pop {
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    .cat-container {
+      align-self: center;
+      margin-top: 10px;
+    }
+
+    .cat {
+      width: 80px;
+      height: 80px;
+    }
+  </style>
+</head>
+<body>
+
+<header>🕶️ Mr. Detective S</header>
+
+<div id="chat"></div>
+
+<div id="inputContainer">
+  <input id="userInput" type="text" placeholder="Say something..." />
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+  const chat = document.getElementById('chat');
+
+  function addMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    div.textContent = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function showHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.textContent = '❤️';
+    chat.appendChild(heart);
+  }
+
+  function showCatIllusion() {
+    const catContainer = document.createElement('div');
+    catContainer.className = 'cat-container';
+
+    const cat = document.createElement('img');
+    cat.className = 'cat';
+
+    // Two images to alternate between
+    const catImages = [
+      'https://placekitten.com/80/80',
+      'https://placekitten.com/81/80'
+    ];
+
+    let i = 0;
+    cat.src = catImages[i];
+    catContainer.appendChild(cat);
+    chat.appendChild(catContainer);
+
+    // Flicker illusion
+    const flicker = setInterval(() => {
+      i = (i + 1) % catImages.length;
+      cat.src = catImages[i];
+    }, 300);
+
+    // Stop after 3 seconds
+    setTimeout(() => clearInterval(flicker), 3000);
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, 'user');
+    input.value = '';
+
+    showHeart();
+    showCatIllusion();
+
+    setTimeout(() => {
+      addMessage("Sleep nako 😴", 'bot');
+    }, 800);
+  }
+</script>
+
+</body>
+</html>
