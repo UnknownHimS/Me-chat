@@ -114,14 +114,19 @@
     </div>
   </div>
 
-  <script src="https://app.wonderchat.io/scripts/wonderchat.js"
+  <!-- Wonderchat embed (if you want it floating on your site) -->
+  <script 
+    src="https://app.wonderchat.io/scripts/wonderchat.js"
     data-name="wonderchat"
     data-address="app.wonderchat.io"
     data-id="cmddf1g4g1pzrsz2xavomvrlo"
     data-widget-size="normal"
     data-widget-button-size="normal"
     defer>
-    
+  </script>
+
+  <!-- Your working script -->
+  <script>
     const input = document.getElementById("input");
     const messages = document.getElementById("messages");
 
@@ -140,10 +145,8 @@
         const botMsg = document.createElement("div");
         botMsg.className = "bot-msg msg";
         
-        // Heart pops out if user says something nice
         if (/❤️|love|thanks|good|cool|hello|hi|awesome/i.test(text)) {
-          botMsg.innerHTML = `🕵️‍♂️ Mr. Detective S: Appreciate that! 
-          tugnako <span class="heart">❤️</span>`;
+          botMsg.innerHTML = `🕵️‍♂️ Mr. Detective S: Appreciate that! tugnako <span class="heart">❤️</span>`;
         } else {
           botMsg.textContent = `🕵️‍♂️ Mr. Detective S: Got it. Analyzing...`;
         }
